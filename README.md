@@ -11,6 +11,13 @@ Status: work in progress, actively evolving.
 - Scripts: `scripts/`
 - Full docs index: `documentation/README.md`
 
+## Fresh install
+
+For a fresh Gentoo system:
+
+1. Read `documentation/FRESH_GENTOO_INSTALL.md`
+2. Run `./scripts/install-gentoo.sh` from repo root
+
 ## Project notes
 
 - This is a personal learning project (Linux since Dec 2025).

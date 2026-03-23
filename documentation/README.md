@@ -14,6 +14,8 @@ This folder is the source-of-truth for your Polybar setup.
   - OS/session/toolchain context and assumptions for debugging.
 - `BACKUPS.md`
   - Snapshot workflow and handoff phrase for future Codex sessions.
+- `FRESH_GENTOO_INSTALL.md`
+  - Step-by-step apply guide for a fresh Gentoo system.
 - `DEPENDENCIES.md`
   - Runtime dependencies, optional tools, and fallback behavior.
 - `SUPPORT.md`
@@ -43,6 +45,7 @@ This folder is the source-of-truth for your Polybar setup.
   - `scripts/gentoo-update.md`
   - `scripts/build-run.md`
   - `scripts/snapshot-backup.md`
+  - `scripts/install-gentoo.md`
 - Quote/text helpers:
   - `scripts/random-lain-quote.md`
   - `scripts/rainbow-text.md`
