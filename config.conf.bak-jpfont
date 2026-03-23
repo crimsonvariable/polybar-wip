@@ -1,0 +1,144 @@
+[colors]
+background = #00000000
+background-alt = #444444
+foreground = #dfdfdf
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[bar/main]
+width = 100%
+height = 34
+radius = 0.0
+fixed-center = true
+bottom = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 0
+line-color = #00000000
+
+border-size = 0
+padding-left = 1
+padding-right = 1
+
+module-margin = 1
+
+font-0 = Ac437 IBM VGA 9x16:size=18;3
+
+modules-left = custom-note
+modules-center = now-playing
+modules-right = volume cpu memory gpu build-percent date
+
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+enable-ipc = true
+
+[module/xworkspaces]
+type = internal/xworkspaces
+
+label-active = %name%
+label-active-background = #00000000
+label-active-underline= ${colors.primary}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = #555
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%
+
+[module/volume]
+type = custom/script
+exec = ~/.config/polybar/scripts/volume-status.sh
+interval = 2
+format-prefix = "VOL "
+format-prefix-foreground = ${colors.primary}
+
+[module/now-playing]
+type = custom/script
+exec = playerctl metadata --format '{{artist}} - {{title}}' 2>/dev/null || echo stopped
+interval = 2
+format = <label>
+label = %{F#e60053}NOW%{F-} %output%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format = %{F#ffb52a}CPU%{F-} [<bar-load>] <label>
+label = %percentage:2%%
+
+bar-load-width = 5
+bar-load-indicator =
+bar-load-fill = |
+bar-load-empty = .
+
+bar-load-foreground-0 = #9ece6a
+bar-load-foreground-1 = #9ece6a
+bar-load-foreground-2 = #e0af68
+bar-load-foreground-3 = #f7768e
+bar-load-foreground-4 = #f7768e
+bar-load-empty-foreground = #666666
+
+[module/memory]
+type = internal/memory
+interval = 2
+format = %{F#ffb52a}RAM%{F-} [<bar-used>] <label>
+label = %percentage_used%%
+
+bar-used-width = 5
+bar-used-indicator =
+bar-used-fill = |
+bar-used-empty = .
+
+bar-used-foreground-0 = #9ece6a
+bar-used-foreground-1 = #9ece6a
+bar-used-foreground-2 = #e0af68
+bar-used-foreground-3 = #f7768e
+bar-used-foreground-4 = #f7768e
+bar-used-empty-foreground = #666666
+
+[module/gpu]
+type = custom/script
+exec = ~/.config/polybar/scripts/gpu-status.sh
+interval = 2
+
+[module/date]
+type = internal/date
+interval = 1
+
+date = %Y-%m-%d %H:%M
+date-alt = %A, %d %B %Y %H:%M:%S
+
+label = %date%
+label-foreground = ${colors.foreground}
+
+[module/build-percent]
+type = custom/script
+exec = ~/.config/polybar/scripts/build-progress.sh
+interval = 1
+format-prefix = "BLD "
+format-prefix-foreground = ${colors.primary}
+
+[module/custom-note]
+type = custom/text
+format = I am me ICONIC, you know?
+format-foreground = #b7fcf8
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+
+; vim:ft=dosini

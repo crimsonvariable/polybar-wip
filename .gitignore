@@ -1,0 +1,9 @@
+# Generated snapshot backups
+backups/snapshots/
+
+# Editor/system noise
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

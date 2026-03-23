@@ -1,0 +1,58 @@
+# gentoo-update.sh
+
+Script path: `~/.config/polybar/scripts/gentoo-update.sh`
+
+## Purpose
+
+Interactive, opt-in Gentoo maintenance runner launched from Polybar click action (`kitty -e ...`).
+
+## Workflow summary
+
+At launch:
+
+1. Prints intro and `emerge --moo`.
+2. Asks for optional `sudo -v` auth pre-step.
+3. Presents step-by-step maintenance actions.
+4. For each step:
+   - shows command + explanation + explicit meaning of Yes/No
+   - shows random quote before confirmation
+   - runs only if user says yes
+5. Prints summary of what ran/skipped.
+6. Prints final quote and `fastfetch --logo lainos --structure logo`.
+
+## Steps covered
+
+- `sudo emerge --sync`
+- `sudo emerge -avuDU --with-bdeps=y @world`
+- `sudo emerge -av @preserved-rebuild`
+- `sudo emerge --depclean -av`
+  - includes safety gate if `@world` was skipped
+- `sudo dispatch-conf` (fallback `sudo etc-update`)
+- `sudo eselect news read`
+
+## Inputs / Flags
+
+No CLI flags (interactive flow).
+
+## Polybar integration
+
+Triggered by click action on `[module/gentoo-update]` label module.
+
+## Dependencies
+
+- `sudo`, `emerge`, `kitty`
+- optional/conditional: `dispatch-conf`, `etc-update`, `eselect`, `fastfetch`
+- quote helper: `random-lain-quote.sh`
+
+## Failure behavior
+
+- Uses `set -euo pipefail`, so failing commands stop execution unless guarded with `|| true`.
+- Non-critical cosmetic commands (`emerge --moo`, quote output, fastfetch) are guarded.
+
+## Manual test
+
+```bash
+kitty -e ~/.config/polybar/scripts/gentoo-update.sh
+# or
+~/.config/polybar/scripts/gentoo-update.sh
+```
