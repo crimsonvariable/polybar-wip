@@ -29,6 +29,7 @@ This folder is the source-of-truth for your Polybar setup.
   - `scripts/dynamic-rainbow.md`
   - `scripts/theme-switch.md`
 - Startup animation lifecycle:
+  - `scripts/launch.md`
   - `scripts/startup-load.md`
   - `scripts/candy-loop.md`
   - `scripts/load-word.md`
@@ -42,6 +43,7 @@ This folder is the source-of-truth for your Polybar setup.
   - `scripts/build-progress.md`
   - `scripts/ws-list.md`
 - Interactive workflows:
+  - `scripts/dotfiles-sync.md`
   - `scripts/gentoo-update.md`
   - `scripts/build-run.md`
   - `scripts/snapshot-backup.md`

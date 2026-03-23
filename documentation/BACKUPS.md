@@ -17,7 +17,7 @@ Optional label:
 ## What a snapshot contains
 
 - `config.conf`
-- `config.conf.bak-jpfont` (if present)
+- `config.conf.jpfont.backup` (if present)
 - `launch.sh`
 - `scripts/`
 - `documentation/`
