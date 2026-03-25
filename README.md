@@ -30,6 +30,7 @@ Status: work in progress, actively evolving.
 - Main config: `config.conf`
 - Launcher: `launch.sh`
 - Scripts: `scripts/`
+- Backup layout notes: `backups/README.md`
 - Full docs index: `documentation/README.md`
 
 ## Fresh install

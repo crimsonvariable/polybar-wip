@@ -81,8 +81,9 @@ copy_if_exists() {
 }
 
 copy_if_exists "config.conf"
-copy_if_exists "config.conf.jpfont.backup"
+copy_if_exists "backups/legacy/config.conf.jpfont.backup"
 # Legacy filename support (older local copies/snapshots)
+copy_if_exists "config.conf.jpfont.backup"
 copy_if_exists "config.conf.bak-jpfont"
 copy_if_exists "launch.sh"
 copy_if_exists "scripts"

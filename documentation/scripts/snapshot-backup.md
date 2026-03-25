@@ -23,7 +23,7 @@ Inside each snapshot:
 
 - copied project items:
   - `config.conf`
-  - `config.conf.jpfont.backup` (if present)
+  - `backups/legacy/config.conf.jpfont.backup` (if present)
   - `launch.sh`
   - `scripts/`
   - `documentation/`
