@@ -2,7 +2,7 @@
 
 This file explains the host environment so script decisions and breakage patterns make sense.
 
-Last updated: 2026-03-23
+Last updated: 2026-03-25
 
 ## Base system
 
@@ -17,6 +17,10 @@ Last updated: 2026-03-23
 - Session start: `~/.xinitrc`
 - Window manager: i3 (default `SESSION=i3`)
 - Polybar launch path: `exec_always --no-startup-id ~/.config/polybar/launch.sh` in `~/.config/i3/config`
+- Screenshot actions:
+  - i3: `Print` -> `flameshot gui`
+  - i3: `Shift+Print` -> `flameshot full -p ~/Pictures/Screenshots`
+  - Polybar module: `SHOT` click actions wired to same commands
 
 ## Monitor topology assumptions
 

@@ -14,10 +14,29 @@ This repository is part of that learning process and reflects a specific persona
 This configuration is tailored to my own environment, hardware, and workflow.
 It may not be portable or production-ready for all systems without adaptation.
 
+## Documentation Scope
+
+The live documentation source-of-truth is `~/.config/polybar/documentation/`.
+Snapshot folders under `~/.config/polybar/backups/snapshots/` are archival captures and may intentionally lag behind current behavior.
+
+## Change Policy
+
+To keep the repo readable:
+
+- New script files should include matching docs under `documentation/scripts/`.
+- New config-only modules (no backing script) should include matching docs under `documentation/modules/`.
+- New external tool requirements should be reflected in `documentation/DEPENDENCIES.md`.
+- New troubleshooting patterns should be reflected in `documentation/SUPPORT.md`.
+
 ## Maintenance
 
 I do **not** guarantee long-term upkeep, immediate fixes, or full compatibility support.
 Updates and fixes are best-effort.
+
+## Support Boundaries
+
+This project is for learning and personal use first.
+Issue reports, questions, and context requests are welcome, but response time and depth are best-effort and may vary.
 
 ## Questions and Collaboration
 

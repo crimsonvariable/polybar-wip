@@ -17,6 +17,7 @@ At launch:
    - shows command + explanation + explicit meaning of Yes/No
    - shows random quote before confirmation
    - runs only if user says yes
+   - if step fails, shows failing command + asks whether to continue remaining steps
 5. Prints summary of what ran/skipped.
 6. Prints final quote and `fastfetch --logo lainos --structure logo`.
 
@@ -29,6 +30,9 @@ At launch:
   - includes safety gate if `@world` was skipped
 - `sudo dispatch-conf` (fallback `sudo etc-update`)
 - `sudo eselect news read`
+
+Before `@world`, script checks if `en_US.UTF-8` exists in `locale -a`.
+If missing, it prints exact fix commands and asks if you still want to try `@world`.
 
 ## Inputs / Flags
 
@@ -46,8 +50,13 @@ Triggered by click action on `[module/gentoo-update]` label module.
 
 ## Failure behavior
 
-- Uses `set -euo pipefail`, so failing commands stop execution unless guarded with `|| true`.
-- Non-critical cosmetic commands (`emerge --moo`, quote output, fastfetch) are guarded.
+- Script runs in strict mode (`set -euo pipefail`) but core maintenance steps are wrapped with a guarded runner.
+- On failure, runner prints:
+  - step label
+  - exact command
+  - exit code
+- Then prompts: continue or stop.
+- Non-critical cosmetic commands (`emerge --moo`, quote output, fastfetch) are guarded with `|| true`.
 
 ## Manual test
 

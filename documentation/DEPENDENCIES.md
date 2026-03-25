@@ -68,6 +68,14 @@ Without these, one or more bars/modules fail hard.
   - `scripts/theme-switch.sh`
   - `scripts/gentoo-update.sh`
 
+## Screenshot module / i3 screenshot binds
+
+- `flameshot`
+- Save path used by full-shot action: `~/Pictures/Screenshots`
+- Integrations:
+  - i3 binds: `Print`, `Shift+Print`
+  - Polybar action module: `flameshot` (`SHOT`)
+
 ## Gentoo updater workflow
 
 - `sudo`
@@ -78,6 +86,9 @@ Without these, one or more bars/modules fail hard.
   - `eselect`
   - `fastfetch`
 - Script: `scripts/gentoo-update.sh`
+- Note:
+  - `app-shells/pwsh` may require locale `en_US.UTF-8` to exist in `locale -a`
+  - updater script now warns before `@world` if locale is missing
 
 ## Quote system
 
@@ -102,6 +113,7 @@ These scripts persist state under `/tmp`:
 - `/tmp/polybar-wifi-scroll.state`
 - `/tmp/polybar-cpu-prev.state`
 - `/tmp/polybar-build-progress.state`
+- `/tmp/polybar-launch.id`
 
 These are recreated automatically when missing.
 
@@ -129,7 +141,7 @@ To show detailed build/fetch progress in non-root Polybar:
 ## Quick dependency check snippet
 
 ```bash
-for c in polybar bash xrandr i3-msg kitty playerctl wpctl pactl iw iwctl nmcli nvidia-smi fastfetch sudo emerge; do
+for c in polybar bash xrandr i3-msg kitty flameshot playerctl wpctl pactl iw iwctl nmcli nvidia-smi fastfetch sudo emerge; do
   command -v "$c" >/dev/null 2>&1 && echo "ok  $c" || echo "miss $c"
 done
 ```

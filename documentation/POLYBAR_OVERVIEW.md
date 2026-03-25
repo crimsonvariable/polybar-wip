@@ -24,7 +24,7 @@ Scripts: `~/.config/polybar/scripts/`
 ### `bar/main` (Top system row)
 - `modules-left = ws-list`
 - `modules-center = now-playing`
-- `modules-right = volume-label volume cpu memory gpu-amd bld-label build-percent`
+- `modules-right = volume-label volume cpu memory gpu-amd gpu-nv bld-label build-percent`
 
 Purpose:
 - Left anchors workspace state.
@@ -32,7 +32,7 @@ Purpose:
 - Right is dense system telemetry (audio/cpu/ram/gpu/build).
 
 ### `bar/main2` (Second top row)
-- `modules-left = custom-note gentoo-update theme-switch`
+- `modules-left = custom-note gentoo-update theme-switch flameshot dotfiles-sync`
 - `modules-center = load-word candy-loop`
 - `modules-right = wifi-label wifi date`
 
@@ -59,20 +59,23 @@ Implemented in `~/.config/polybar/launch.sh`.
 
 ### Sequence
 1. Kill running polybar instances (`killall -q polybar`).
-2. Wait until all are dead (`pgrep` loop).
-3. Log monitor/session info to `/tmp/polybar-launch.log`.
-4. Write startup deadline to `/tmp/polybar-startup.until`.
-5. Launch `bar/boot` on primary monitor.
-6. Poll `startup-load.sh --done` until animation reaches completion.
-7. Sleep extra hold time (`STARTUP_HOLD_SECS`, currently 5).
-8. Launch `bar/main` and `bar/main2`.
-9. Launch `bar/workspaces-only` on all non-primary monitors.
-10. Kill boot bar process.
+2. Write a unique launch generation id to `/tmp/polybar-launch.id`.
+3. Wait until all old bars are dead (`pgrep` loop).
+4. Log monitor/session info to `/tmp/polybar-launch.log`.
+5. Write startup deadline to `/tmp/polybar-startup.until`.
+6. Launch `bar/boot` on primary monitor.
+7. Poll `startup-load.sh --done` until animation reaches completion.
+8. Sleep extra hold time (`STARTUP_HOLD_SECS`, currently 5).
+9. Re-check launch generation id to avoid stale delayed spawns.
+10. Launch `bar/main` and `bar/main2`.
+11. Launch `bar/workspaces-only` on all non-primary monitors.
+12. Kill boot bar process.
 
 ### Why this design
 - Keeps startup visually intentional.
 - Avoids half-rendered normal bars while startup animation is still running.
 - Makes startup timing deterministic using script hooks instead of fixed blind sleep.
+- Prevents duplicate bars when launcher is triggered repeatedly during startup delay windows.
 
 ## 4) Theme Engine and Selector (How It Actually Works)
 
@@ -147,6 +150,7 @@ It is a step-by-step, opt-in updater with explicit confirmations and safety note
 - Then asks a strict `[y/n]` prompt.
 - If YES, executes that step.
 - If NO, skips and continues where safe.
+- If a command fails, it prints the failing command and asks whether to continue remaining steps.
 
 #### Steps covered
 1. `sudo -v` auth (optional)
@@ -156,6 +160,11 @@ It is a step-by-step, opt-in updater with explicit confirmations and safety note
 5. `sudo emerge --depclean -av` (with extra safety gate if `@world` was skipped)
 6. `dispatch-conf` (fallback `etc-update`)
 7. `sudo eselect news read`
+
+#### Locale pre-check for `@world`
+- Before running the `@world` step, script checks whether `en_US.UTF-8` exists (`locale -a`).
+- If missing, it prints explicit fix commands and asks whether to try `@world` anyway.
+- This is mainly to avoid `app-shells/pwsh` pkg_pretend failures that hard-stop updates.
 
 #### Quote injection logic
 Before each yes/no question, it runs:
@@ -231,6 +240,16 @@ This means the string length is fixed while visual intensity changes with load.
 - `build-progress.sh` parses emerge/fetch logs.
 - Emits state-oriented output (`idle`, `fetch`, `emerge`, percent when derivable).
 
+### Screenshot actions
+#### `flameshot` (config-only module)
+- Label `SHOT` is theme-colored via `dynamic-rainbow --block`.
+- Click actions:
+  - Left click: `flameshot gui` (interactive region capture)
+  - Right click: `flameshot full -p ~/Pictures/Screenshots` (full-screen save)
+- Matching i3 keybinds:
+  - `Print` -> `flameshot gui`
+  - `Shift+Print` -> full-screen save
+
 ### Candy lane and load-word sync
 #### `candy-loop` (`candy-loop.sh`)
 - Persistent ILoveCandy-style animation.
@@ -265,6 +284,7 @@ This means the string length is fixed while visual intensity changes with load.
 ## 7) State Files Used (Important for Debugging)
 
 Common runtime state paths in `/tmp`:
+- `/tmp/polybar-launch.id`
 - `/tmp/polybar-theme.state`
 - `/tmp/polybar-flow.state`
 - `/tmp/polybar-startup.until`

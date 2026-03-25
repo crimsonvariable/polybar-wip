@@ -87,6 +87,47 @@ Check:
 - `/tmp/polybar-startup.pos`
 - `STARTUP_SECS` and `STARTUP_HOLD_SECS` exported by launcher
 
+## Problem: duplicate polybars after reload/manual launch
+
+Current launcher has generation-lock protection via:
+
+- `/tmp/polybar-launch.id`
+
+If duplicates still appear, force clean relaunch:
+
+```bash
+killall -q polybar
+rm -f /tmp/polybar-launch.id
+~/.config/polybar/launch.sh
+```
+
+Also verify only one i3 autostart line exists for polybar in `~/.config/i3/config`.
+
+## Problem: updater fails on `@world` with locale error (pwsh)
+
+If you see messages like:
+- `Could not switch to the en_US.UTF-8 locale`
+
+Fix:
+
+```bash
+sudo sh -c 'grep -q "^en_US.UTF-8 UTF-8$" /etc/locale.gen || echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
+sudo locale-gen
+locale -a | grep -i 'en_US\.utf'
+```
+
+Then rerun updater / world update.
+
+## Problem: screenshot module/keybind does nothing
+
+Check:
+
+```bash
+command -v flameshot
+```
+
+If missing, install Flameshot and reload i3 config (`Mod+Shift+c`).
+
 ## 4. Safe reset procedure
 
 If visuals get heavily out-of-sync:

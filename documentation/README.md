@@ -1,6 +1,7 @@
 # Polybar Documentation Index
 
 This folder is the source-of-truth for your Polybar setup.
+Snapshot folders under `backups/snapshots/` are historical captures and are not edited as live docs.
 
 ## What this folder contains
 
@@ -20,6 +21,10 @@ This folder is the source-of-truth for your Polybar setup.
   - Runtime dependencies, optional tools, and fallback behavior.
 - `SUPPORT.md`
   - Troubleshooting and support runbook.
+- `CHANGELOG.md`
+  - Human-readable timeline of notable repo-level changes.
+- `modules/*.md`
+  - Non-script module wiring docs (for modules that are pure config + click actions).
 - `scripts/*.md`
   - One page per script with flags, outputs, state files, and module wiring.
 
@@ -48,6 +53,8 @@ This folder is the source-of-truth for your Polybar setup.
   - `scripts/build-run.md`
   - `scripts/snapshot-backup.md`
   - `scripts/install-gentoo.md`
+- Action/click modules:
+  - `modules/flameshot.md`
 - Quote/text helpers:
   - `scripts/random-lain-quote.md`
   - `scripts/rainbow-text.md`

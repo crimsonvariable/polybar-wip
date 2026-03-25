@@ -24,6 +24,7 @@ Minimum commands expected by this setup:
 - `iw` and/or `iwctl`
 - `nvidia-smi` (only if using NVIDIA module)
 - `fastfetch` (optional visual extras)
+- `flameshot` (screenshot module + i3 screenshot binds)
 
 ## 3. Apply config into `~/.config/polybar`
 
@@ -53,7 +54,17 @@ exec_always --no-startup-id ~/.config/polybar/launch.sh
 ~/.config/polybar/launch.sh
 ```
 
-## 6. Optional post-install checks
+## 6. Screenshot target directory (recommended)
+
+```bash
+mkdir -p ~/Pictures/Screenshots
+```
+
+This is used by:
+- i3 `Shift+Print` full screenshot bind
+- Polybar `SHOT` module right-click action
+
+## 7. Optional post-install checks
 
 ```bash
 bash -n ~/.config/polybar/launch.sh
@@ -61,7 +72,7 @@ bash -n ~/.config/polybar/scripts/*.sh
 tail -n 80 /tmp/polybar-launch.log
 ```
 
-## 7. Notes
+## 8. Notes
 
 - This is a WIP personal setup, intentionally customized.
 - Read `documentation/ENVIRONMENT.md` and `documentation/DEPENDENCIES.md` before debugging.

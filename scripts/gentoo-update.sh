@@ -22,12 +22,55 @@ confirm() {
   done
 }
 
+has_en_us_utf8_locale() {
+  locale -a 2>/dev/null | tr '[:upper:]' '[:lower:]' | grep -Eq '^en_us\.utf-?8$'
+}
+
+print_locale_fix_instructions() {
+  cat <<'EOF'
+[WARN] Missing required locale: en_US.UTF-8
+One of your packages (app-shells/pwsh) requires this locale in pkg_pretend.
+
+Fix once, then rerun updater:
+  sudo sh -c "grep -q '^en_US.UTF-8 UTF-8$' /etc/locale.gen || echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen"
+  sudo locale-gen
+  sudo eselect locale list
+  sudo eselect locale set <number-for-en_US.utf8>
+  sudo env-update
+  source /etc/profile
+EOF
+}
+
 ask_with_quote() {
   local prompt="$1"
   printf '\n'
   ~/.config/polybar/scripts/random-lain-quote.sh || true
   printf '\n'
   confirm "$prompt"
+}
+
+run_or_continue() {
+  local label="$1"
+  shift
+  local rc
+
+  set +e
+  "$@"
+  rc=$?
+  set -e
+
+  if [[ "$rc" -eq 0 ]]; then
+    return 0
+  fi
+
+  printf '\n[ERROR] %s failed (exit %s)\n' "$label" "$rc"
+  printf '  Command: %s\n' "$*"
+  if confirm "Continue with remaining steps?"; then
+    return 1
+  fi
+
+  echo "Stopping updater by request."
+  exit "$rc"
 }
 
 step() {
@@ -55,7 +98,7 @@ printf '\n'
 
 step "Sudo auth"
 if ask_with_quote "Authenticate sudo now?"; then
-  sudo -v
+  run_or_continue "sudo auth" sudo -v || true
 else
   echo "Skipped sudo auth now (you may be prompted later when running chosen steps)."
 fi
@@ -68,8 +111,9 @@ disclaimer \
   "Skips sync and continues. Usually safe, but version data may be stale."
 if ask_with_quote "Run sync step?"; then
   step "Syncing tree"
-  sudo emerge --sync
-  did_sync=1
+  if run_or_continue "sync tree" sudo emerge --sync; then
+    did_sync=1
+  fi
 fi
 
 disclaimer \
@@ -79,9 +123,22 @@ disclaimer \
   "Runs full @world upgrade flow and prompts you to review proposed changes." \
   "Skips world update and continues. Safe, but no upgrades are applied."
 if ask_with_quote "Run @world update step?"; then
-  step "Updating @world"
-  sudo emerge -avuDU --with-bdeps=y @world
-  did_world=1
+  if ! has_en_us_utf8_locale; then
+    print_locale_fix_instructions
+    if ! confirm "Locale is missing. Try @world anyway?"; then
+      echo "Skipped @world for now. Fix locale and rerun when ready."
+    else
+      step "Updating @world"
+      if run_or_continue "@world update" sudo emerge -avuDU --with-bdeps=y @world; then
+        did_world=1
+      fi
+    fi
+  else
+    step "Updating @world"
+    if run_or_continue "@world update" sudo emerge -avuDU --with-bdeps=y @world; then
+      did_world=1
+    fi
+  fi
 fi
 
 disclaimer \
@@ -92,8 +149,9 @@ disclaimer \
   "Skips and continues. Often safe short-term; can be run later."
 if ask_with_quote "Run preserved-rebuild step?"; then
   step "Running preserved-rebuild"
-  sudo emerge -av @preserved-rebuild
-  did_preserved=1
+  if run_or_continue "preserved-rebuild" sudo emerge -av @preserved-rebuild; then
+    did_preserved=1
+  fi
 fi
 
 disclaimer \
@@ -107,15 +165,17 @@ if ask_with_quote "Run depclean step?"; then
     echo "Safety gate: @world was skipped. Depclean right now may be risky."
     if ask_with_quote "Force depclean anyway?"; then
       step "Running depclean (forced)"
-      sudo emerge --depclean -av
-      did_depclean=1
+      if run_or_continue "depclean (forced)" sudo emerge --depclean -av; then
+        did_depclean=1
+      fi
     else
       echo "Depclean skipped for safety."
     fi
   else
     step "Running depclean"
-    sudo emerge --depclean -av
-    did_depclean=1
+    if run_or_continue "depclean" sudo emerge --depclean -av; then
+      did_depclean=1
+    fi
   fi
 fi
 
@@ -128,11 +188,14 @@ disclaimer \
 if ask_with_quote "Run config merge step now?"; then
   step "Merging config updates"
   if command -v dispatch-conf >/dev/null 2>&1; then
-    sudo dispatch-conf
+    if run_or_continue "dispatch-conf" sudo dispatch-conf; then
+      did_config=1
+    fi
   else
-    sudo etc-update
+    if run_or_continue "etc-update" sudo etc-update; then
+      did_config=1
+    fi
   fi
-  did_config=1
 fi
 
 disclaimer \
@@ -143,8 +206,9 @@ disclaimer \
   "Skips and finishes. Safe, but you may miss important notices."
 if ask_with_quote "Read Gentoo news now?"; then
   step "Reading Gentoo news"
-  sudo eselect news read
-  did_news=1
+  if run_or_continue "eselect news read" sudo eselect news read; then
+    did_news=1
+  fi
 fi
 
 printf '\nSummary\n'

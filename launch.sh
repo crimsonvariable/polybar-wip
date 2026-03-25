@@ -1,5 +1,9 @@
 #!/bin/sh
 
+LOCK_FILE=/tmp/polybar-launch.id
+LAUNCH_ID="$(date +%s)-$$"
+echo "$LAUNCH_ID" > "$LOCK_FILE"
+
 killall -q polybar
 
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
@@ -33,13 +37,24 @@ fi
 boot_pid=$!
 
 (
+  if [ "$(cat "$LOCK_FILE" 2>/dev/null)" != "$LAUNCH_ID" ]; then
+    exit 0
+  fi
+
   if [ -x ~/.config/polybar/scripts/startup-load.sh ]; then
     while ! ~/.config/polybar/scripts/startup-load.sh --done >/dev/null 2>&1; do
+      if [ "$(cat "$LOCK_FILE" 2>/dev/null)" != "$LAUNCH_ID" ]; then
+        exit 0
+      fi
       sleep 0.2
     done
     sleep "$STARTUP_HOLD_SECS"
   else
     sleep "$((STARTUP_SECS + STARTUP_HOLD_SECS))"
+  fi
+
+  if [ "$(cat "$LOCK_FILE" 2>/dev/null)" != "$LAUNCH_ID" ]; then
+    exit 0
   fi
 
   polybar -c ~/.config/polybar/config.conf main >>"$LOG" 2>&1 &
