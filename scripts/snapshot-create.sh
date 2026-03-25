@@ -13,7 +13,7 @@ DEST_SET_BY_USER=0
 usage() {
   cat <<'USAGE'
 Usage:
-  snapshot-backup.sh [--dest DIR] [--label TEXT] [--help]
+  snapshot-create.sh [--dest DIR] [--label TEXT] [--help]
 
 Creates a timestamped Polybar snapshot containing:
 - config + scripts + documentation
@@ -21,9 +21,9 @@ Creates a timestamped Polybar snapshot containing:
 - file manifest
 
 Examples:
-  ~/.config/polybar/scripts/snapshot-backup.sh
-  ~/.config/polybar/scripts/snapshot-backup.sh --label "pre-theme-refactor"
-  ~/.config/polybar/scripts/snapshot-backup.sh --dest /mnt/storage/backups/polybar/snapshots
+  ~/.config/polybar/scripts/snapshot-create.sh
+  ~/.config/polybar/scripts/snapshot-create.sh --label "pre-theme-refactor"
+  ~/.config/polybar/scripts/snapshot-create.sh --dest /mnt/storage/backups/polybar/snapshots
 USAGE
 }
 

@@ -1,6 +1,6 @@
-# build-run.sh
+# task-run-with-progress.sh
 
-Script path: `~/.config/polybar/scripts/build-run.sh`
+Script path: `~/.config/polybar/scripts/task-run-with-progress.sh`
 
 ## Purpose
 
@@ -8,7 +8,7 @@ Wrapper that runs an arbitrary build command and pipes output to `build-progress
 
 ## Inputs / Flags
 
-- positional command required: `build-run.sh <build command...>`
+- positional command required: `task-run-with-progress.sh <build command...>`
 
 No extra flags.
 
@@ -25,6 +25,6 @@ Indirect helper for `[module/build-percent]`.
 ## Example
 
 ```bash
-~/.config/polybar/scripts/build-run.sh emerge -avuDN @world
-~/.config/polybar/scripts/build-run.sh ninja -C build
+~/.config/polybar/scripts/task-run-with-progress.sh emerge -avuDN @world
+~/.config/polybar/scripts/task-run-with-progress.sh ninja -C build
 ```

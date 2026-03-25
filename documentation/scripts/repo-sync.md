@@ -1,6 +1,6 @@
-# dotfiles-sync.sh
+# repo-sync.sh
 
-Script path: `~/.config/polybar/scripts/dotfiles-sync.sh`
+Script path: `~/.config/polybar/scripts/repo-sync.sh`
 
 ## Purpose
 
@@ -30,7 +30,7 @@ Environment variable:
 
 ## Polybar integration
 
-Used by `[module/dotfiles-sync]` in `config.conf`:
+Used by `[module/repo-sync]` in `config.conf`:
 
 - left click: interactive sync/commit/push flow in Kitty
 - right click: quick sync mode in Kitty
@@ -44,6 +44,6 @@ Used by `[module/dotfiles-sync]` in `config.conf`:
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/dotfiles-sync.sh --quick gentoo
-~/.config/polybar/scripts/dotfiles-sync.sh gentoo
+~/.config/polybar/scripts/repo-sync.sh --quick gentoo
+~/.config/polybar/scripts/repo-sync.sh gentoo
 ```

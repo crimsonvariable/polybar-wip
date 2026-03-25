@@ -25,7 +25,7 @@ No flags.
 
 Used by `[module/volume]`.
 
-`[module/volume-label]` is separate and rendered by `dynamic-rainbow.sh --block VOL`.
+`[module/volume-label]` is separate and rendered by `theme-engine.sh --block VOL`.
 
 ## Manual test
 

@@ -22,7 +22,7 @@ Example:
 
 - Usage delta from `/proc/stat`
 - Temperature from `TEMP_PATH` (default `/sys/class/hwmon/hwmon1/temp1_input`)
-- Label color animation from `dynamic-rainbow.sh --block CPU`
+- Label color animation from `theme-engine.sh --block CPU`
 
 ## State files
 

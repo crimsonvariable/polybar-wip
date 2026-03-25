@@ -70,6 +70,20 @@ If jitter returns, verify:
 - wifi `WIDTH` constant is unchanged
 - module order in `modules-center` is unchanged
 
+## Problem: now-playing says `stopped` while one player is active
+
+Check which players/statuses are visible to `playerctl`:
+
+```bash
+playerctl -l
+for p in $(playerctl -l | awk '!seen[$0]++'); do
+  printf '%s\t%s\n' "$p" "$(playerctl -p "$p" status 2>/dev/null || echo ERR)"
+done
+```
+
+`now-playing.sh` now prefers one active source (`Playing` then `Paused`) and reads
+status/metadata from that same source to avoid mixed-source false `stopped`.
+
 ## Problem: theme labels not updating
 
 Theme/flow state files may be stale:
@@ -127,6 +141,19 @@ command -v flameshot
 ```
 
 If missing, install Flameshot and reload i3 config (`Mod+Shift+c`).
+
+## Problem: `TOOLS` module click does nothing
+
+Verify both files and execute bits:
+
+```bash
+ls -l ~/.config/polybar/scripts/tools-launcher.sh ~/.config/rofi/scripts/tool-hub.sh
+command -v rofi
+```
+
+Expected:
+- both scripts executable
+- `rofi` present in PATH
 
 ## 4. Safe reset procedure
 

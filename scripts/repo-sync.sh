@@ -9,12 +9,12 @@ QUICK=0
 usage() {
   cat <<'USAGE'
 Usage:
-  dotfiles-sync.sh [--quick] [profile]
+  repo-sync.sh [--quick] [profile]
 
 Examples:
-  ~/.config/polybar/scripts/dotfiles-sync.sh
-  ~/.config/polybar/scripts/dotfiles-sync.sh gentoo
-  ~/.config/polybar/scripts/dotfiles-sync.sh --quick gentoo
+  ~/.config/polybar/scripts/repo-sync.sh
+  ~/.config/polybar/scripts/repo-sync.sh gentoo
+  ~/.config/polybar/scripts/repo-sync.sh --quick gentoo
 USAGE
 }
 

@@ -124,5 +124,5 @@ pct=$((pos * 100 / CELLS))
 (( pct < 0 )) && pct=0
 (( pct > 100 )) && pct=100
 
-label="$(~/.config/polybar/scripts/dynamic-rainbow.sh --block "CrimsonVAR Gentoo" 2>/dev/null || printf 'CrimsonVAR Gentoo')"
+label="$(~/.config/polybar/scripts/theme-engine.sh --block "CrimsonVAR Gentoo" 2>/dev/null || printf 'CrimsonVAR Gentoo')"
 printf '%s [%%{F#f1c40f}%s%s%s%%{F-}] %03d%%\n' "$label" "$eaten" "$pac" "$candies" "$pct"

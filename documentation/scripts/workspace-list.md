@@ -1,6 +1,6 @@
-# ws-list.sh
+# workspace-list.sh
 
-Script path: `~/.config/polybar/scripts/ws-list.sh`
+Script path: `~/.config/polybar/scripts/workspace-list.sh`
 
 ## Purpose
 
@@ -43,11 +43,11 @@ Theme-specific palettes are hard-coded for the available themes.
 
 Used by:
 
-- `[module/ws-list]`
+- `[module/workspace-list]`
 - appears in main and workspace-only bars
 
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/ws-list.sh
+~/.config/polybar/scripts/workspace-list.sh
 ```

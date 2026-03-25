@@ -1,6 +1,6 @@
-# random-lain-quote.sh
+# quote-random.sh
 
-Script path: `~/.config/polybar/scripts/random-lain-quote.sh`
+Script path: `~/.config/polybar/scripts/quote-random.sh`
 
 ## Purpose
 
@@ -40,5 +40,5 @@ Used by `gentoo-update.sh` before prompts and at completion.
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/random-lain-quote.sh
+~/.config/polybar/scripts/quote-random.sh
 ```

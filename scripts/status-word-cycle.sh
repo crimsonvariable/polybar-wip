@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CPU_STATE_FILE="/tmp/polybar-loadword-prev.state"
+CPU_STATE_FILE="/tmp/polybar-status-word-prev.state"
 THEME_STATE_FILE="/tmp/polybar-theme.state"
 CYCLE_FILE="/tmp/polybar-candy-cycle.count"
 
@@ -58,7 +58,7 @@ words=(
   "Thierry<3"
 )
 DISPLAY_LEN=10
-ALLOW_WIDE="${LOAD_WORD_ALLOW_WIDE:-0}"
+ALLOW_WIDE="${STATUS_WORD_ALLOW_WIDE:-${LOAD_WORD_ALLOW_WIDE:-0}}"
 
 read_cpu_totals() {
   awk '/^cpu /{idle=$5+$6; total=0; for(i=2;i<=11;i++) total+=$i; print total, idle; exit}' /proc/stat

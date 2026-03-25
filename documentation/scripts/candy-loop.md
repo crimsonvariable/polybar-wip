@@ -42,7 +42,7 @@ Used by:
 
 - `[module/candy-loop]`
 
-Also drives word switching in `load-word.sh` through `polybar-candy-cycle.count`.
+Also drives word switching in `status-word-cycle.sh` through `polybar-candy-cycle.count`.
 
 ## Modularity points
 

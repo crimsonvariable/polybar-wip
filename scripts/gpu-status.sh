@@ -3,7 +3,7 @@
 set -u
 
 anim_label() {
-  ~/.config/polybar/scripts/dynamic-rainbow.sh --block "$1" 2>/dev/null || printf '%s' "$1"
+  ~/.config/polybar/scripts/theme-engine.sh --block "$1" 2>/dev/null || printf '%s' "$1"
 }
 
 build_bar() {

@@ -21,6 +21,9 @@ Last updated: 2026-03-25
   - i3: `Print` -> `flameshot gui`
   - i3: `Shift+Print` -> `flameshot full -p ~/Pictures/Screenshots`
   - Polybar module: `SHOT` click actions wired to same commands
+- Tools menu actions:
+  - Polybar module: `TOOLS` -> `~/.config/polybar/scripts/tools-launcher.sh`
+  - Wrapper target: `~/.config/rofi/scripts/tool-hub.sh`
 
 ## Monitor topology assumptions
 

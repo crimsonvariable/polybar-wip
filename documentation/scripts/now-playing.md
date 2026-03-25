@@ -30,6 +30,8 @@ Example tag map:
 ## Behavior
 
 - Uses `playerctl` for status + metadata.
+- Selects one target player source (`Playing` preferred, then `Paused`, then first available).
+- Reads status and metadata from that same selected player to avoid cross-player mismatches.
 - If stopped/unavailable, prints `stopped`.
 - If paused, prefixes with `[PAUSED]`.
 - Scrolls long text using a persistent offset state.

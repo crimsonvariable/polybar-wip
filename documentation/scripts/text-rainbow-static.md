@@ -1,6 +1,6 @@
-# rainbow-text.sh
+# text-rainbow-static.sh
 
-Script path: `~/.config/polybar/scripts/rainbow-text.sh`
+Script path: `~/.config/polybar/scripts/text-rainbow-static.sh`
 
 ## Purpose
 
@@ -26,5 +26,5 @@ General helper script; currently not a primary module dependency in active confi
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/rainbow-text.sh "CrimsonVAR Gentoo"
+~/.config/polybar/scripts/text-rainbow-static.sh "CrimsonVAR Gentoo"
 ```

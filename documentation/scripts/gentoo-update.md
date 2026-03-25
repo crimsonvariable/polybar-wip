@@ -46,7 +46,7 @@ Triggered by click action on `[module/gentoo-update]` label module.
 
 - `sudo`, `emerge`, `kitty`
 - optional/conditional: `dispatch-conf`, `etc-update`, `eselect`, `fastfetch`
-- quote helper: `random-lain-quote.sh`
+- quote helper: `quote-random.sh`
 
 ## Failure behavior
 

@@ -2,13 +2,73 @@
 
 set -euo pipefail
 
-STATE_FILE="/tmp/polybar-theme.state"
-FLOW_FILE="/tmp/polybar-flow.state"
 render_mode="gradient"
-if [[ "${1:-}" == "--block" ]]; then
-  render_mode="block"
-  shift
+pipe_name="main"
+
+show_help() {
+  cat <<'EOF'
+theme-engine.sh - Render rainbow text for Polybar modules
+
+Usage:
+  theme-engine.sh [--block] [--pipe NAME] TEXT
+
+Options:
+  --block           Render one solid color across the whole TEXT.
+  --pipe NAME       Use independent theme/flow state files for NAME.
+  --channel NAME    Alias for --pipe.
+  --help            Show this help text.
+
+State files:
+  main pipe   -> /tmp/polybar-theme.state + /tmp/polybar-flow.state
+  other pipe  -> /tmp/polybar-theme.<pipe>.state + /tmp/polybar-flow.<pipe>.state
+EOF
+}
+
+while (( $# > 0 )); do
+  case "$1" in
+    --block)
+      render_mode="block"
+      shift
+      ;;
+    --pipe|--channel)
+      if (( $# < 2 )); then
+        printf 'error: %s requires a value\n' "$1" >&2
+        exit 1
+      fi
+      pipe_name="$2"
+      shift 2
+      ;;
+    --pipe=*|--channel=*)
+      pipe_name="${1#*=}"
+      shift
+      ;;
+    --help|-h)
+      show_help
+      exit 0
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+pipe_name="${pipe_name,,}"
+if [[ ! "$pipe_name" =~ ^[a-z0-9_-]+$ ]]; then
+  pipe_name="main"
 fi
+
+if [[ "$pipe_name" == "main" ]]; then
+  STATE_FILE="/tmp/polybar-theme.state"
+  FLOW_FILE="/tmp/polybar-flow.state"
+else
+  STATE_FILE="/tmp/polybar-theme.${pipe_name}.state"
+  FLOW_FILE="/tmp/polybar-flow.${pipe_name}.state"
+fi
+
 text="${*:-}"
 [[ -z "$text" ]] && exit 0
 

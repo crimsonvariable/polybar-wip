@@ -65,8 +65,17 @@ Without these, one or more bars/modules fail hard.
 
 - `kitty` for click-open menus and updater terminal flow
 - Scripts:
-  - `scripts/theme-switch.sh`
+  - `scripts/theme-control.sh`
   - `scripts/gentoo-update.sh`
+
+## Tools launcher (Rofi)
+
+- `rofi`
+- Wrapper script: `scripts/tools-launcher.sh`
+- Downstream menu script expected:
+  - `~/.config/rofi/scripts/tool-hub.sh`
+- Behavior:
+  - Wrapper safely exits with clear error if target tool-hub script is missing/unexecutable.
 
 ## Screenshot module / i3 screenshot binds
 
@@ -95,7 +104,7 @@ Without these, one or more bars/modules fail hard.
 - `shuf` (preferred random selector)
 - Fallback randomization uses `awk` only
 - Data file: `scripts/lain-quotes.tsv`
-- Script: `scripts/random-lain-quote.sh`
+- Script: `scripts/quote-random.sh`
 
 ## State files and writable paths
 
@@ -108,7 +117,7 @@ These scripts persist state under `/tmp`:
 - `/tmp/polybar-candy-loop.start`
 - `/tmp/polybar-startup.until`
 - `/tmp/polybar-startup.pos`
-- `/tmp/polybar-loadword-prev.state`
+- `/tmp/polybar-status-word-prev.state`
 - `/tmp/polybar-now-playing.state`
 - `/tmp/polybar-wifi-scroll.state`
 - `/tmp/polybar-cpu-prev.state`
@@ -141,7 +150,7 @@ To show detailed build/fetch progress in non-root Polybar:
 ## Quick dependency check snippet
 
 ```bash
-for c in polybar bash xrandr i3-msg kitty flameshot playerctl wpctl pactl iw iwctl nmcli nvidia-smi fastfetch sudo emerge; do
+for c in polybar bash xrandr i3-msg kitty rofi flameshot playerctl wpctl pactl iw iwctl nmcli nvidia-smi fastfetch sudo emerge; do
   command -v "$c" >/dev/null 2>&1 && echo "ok  $c" || echo "miss $c"
 done
 ```

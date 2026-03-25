@@ -5,8 +5,8 @@ set -euo pipefail
 PROGRESS_SCRIPT="$HOME/.config/polybar/scripts/build-progress.sh"
 
 if [[ $# -eq 0 ]]; then
-  echo "usage: build-run.sh <build command...>" >&2
-  echo "example: build-run.sh ninja -C build" >&2
+  echo "usage: task-run-with-progress.sh <build command...>" >&2
+  echo "example: task-run-with-progress.sh ninja -C build" >&2
   exit 2
 fi
 

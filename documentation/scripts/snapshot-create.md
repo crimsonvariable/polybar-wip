@@ -1,6 +1,6 @@
-# snapshot-backup.sh
+# snapshot-create.sh
 
-Script path: `~/.config/polybar/scripts/snapshot-backup.sh`
+Script path: `~/.config/polybar/scripts/snapshot-create.sh`
 
 ## Purpose
 
@@ -49,6 +49,6 @@ If no commit exists yet, it writes `no-commits-yet`.
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/snapshot-backup.sh
-~/.config/polybar/scripts/snapshot-backup.sh --label "manual-test"
+~/.config/polybar/scripts/snapshot-create.sh
+~/.config/polybar/scripts/snapshot-create.sh --label "manual-test"
 ```

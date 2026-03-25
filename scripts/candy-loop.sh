@@ -68,7 +68,7 @@ if [[ -r "$STATE_FILE" ]]; then
   fi
 fi
 
-# Signal cycle completion (wraparound) for load-word switching.
+# Signal cycle completion (wraparound) for status-word-cycle switching.
 if (( phase < prev_phase )); then
   count=0
   if [[ -r "$CYCLE_FILE" ]]; then

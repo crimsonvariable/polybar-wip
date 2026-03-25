@@ -44,7 +44,7 @@ EOF
 ask_with_quote() {
   local prompt="$1"
   printf '\n'
-  ~/.config/polybar/scripts/random-lain-quote.sh || true
+  ~/.config/polybar/scripts/quote-random.sh || true
   printf '\n'
   confirm "$prompt"
 }
@@ -220,7 +220,7 @@ printf '  config merge:     %s\n' "$( [[ $did_config -eq 1 ]] && echo ran || ech
 printf '  news:             %s\n' "$( [[ $did_news -eq 1 ]] && echo ran || echo skipped )"
 
 printf '\n'
-~/.config/polybar/scripts/random-lain-quote.sh || true
+~/.config/polybar/scripts/quote-random.sh || true
 
 printf '\n'
 fastfetch --logo lainos --structure logo || true

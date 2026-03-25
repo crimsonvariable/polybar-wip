@@ -6,7 +6,7 @@ STATE_FILE="/tmp/polybar-cpu-prev.state"
 TEMP_PATH="/sys/class/hwmon/hwmon1/temp1_input"
 
 anim_label() {
-  ~/.config/polybar/scripts/dynamic-rainbow.sh --block "$1" 2>/dev/null || printf '%s' "$1"
+  ~/.config/polybar/scripts/theme-engine.sh --block "$1" 2>/dev/null || printf '%s' "$1"
 }
 
 read_cpu_totals() {

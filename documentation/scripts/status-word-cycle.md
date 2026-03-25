@@ -1,6 +1,6 @@
-# load-word.sh
+# status-word-cycle.sh
 
-Script path: `~/.config/polybar/scripts/load-word.sh`
+Script path: `~/.config/polybar/scripts/status-word-cycle.sh`
 
 ## Purpose
 
@@ -12,8 +12,9 @@ No flags.
 
 Environment variable:
 
-- `LOAD_WORD_ALLOW_WIDE=1`
+- `STATUS_WORD_ALLOW_WIDE=1`
   - allows non-ASCII/wide glyph words in random pool
+- Backward compatible alias: `LOAD_WORD_ALLOW_WIDE=1`
 
 ## Output format
 
@@ -36,12 +37,12 @@ This makes switching feel synchronized with the loop animation.
 
 ## State files
 
-- `/tmp/polybar-loadword-prev.state`
+- `/tmp/polybar-status-word-prev.state`
 - consumes `/tmp/polybar-candy-cycle.count`
 
 ## Polybar integration
 
-Used by `[module/load-word]`.
+Used by `[module/status-word-cycle]`.
 
 ## Modularity points
 
@@ -51,6 +52,6 @@ Used by `[module/load-word]`.
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/load-word.sh
-LOAD_WORD_ALLOW_WIDE=1 ~/.config/polybar/scripts/load-word.sh
+~/.config/polybar/scripts/status-word-cycle.sh
+STATUS_WORD_ALLOW_WIDE=1 ~/.config/polybar/scripts/status-word-cycle.sh
 ```

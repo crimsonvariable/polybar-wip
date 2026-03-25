@@ -13,7 +13,7 @@ Module block:
 ```ini
 [module/flameshot]
 type = custom/script
-exec = ~/.config/polybar/scripts/dynamic-rainbow.sh --block 'SHOT'
+exec = ~/.config/polybar/scripts/theme-engine.sh --block 'SHOT'
 interval = 0.2
 click-left = flameshot gui
 click-right = flameshot full -p ~/Pictures/Screenshots
@@ -23,7 +23,7 @@ Placed in bar:
 
 ```ini
 [bar/main2]
-modules-left = custom-note gentoo-update theme-switch flameshot dotfiles-sync
+modules-left = identity-label gentoo-update theme-control flameshot tools-launcher repo-sync
 ```
 
 ## Click actions

@@ -5,13 +5,13 @@ This project uses timestamped local snapshots so you can roll back or hand off c
 ## One-command backup
 
 ```bash
-~/.config/polybar/scripts/snapshot-backup.sh
+~/.config/polybar/scripts/snapshot-create.sh
 ```
 
 Optional label:
 
 ```bash
-~/.config/polybar/scripts/snapshot-backup.sh --label "before-gpu-refactor"
+~/.config/polybar/scripts/snapshot-create.sh --label "before-gpu-refactor"
 ```
 
 ## What a snapshot contains
@@ -52,7 +52,7 @@ You can say this to future Codex sessions:
 
 "Update my Polybar backup by creating a new snapshot and refresh the stack note as of last commit."
 
-That maps directly to running `snapshot-backup.sh`.
+That maps directly to running `snapshot-create.sh`.
 
 ## Home shortcut tools
 

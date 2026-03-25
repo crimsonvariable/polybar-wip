@@ -21,6 +21,7 @@ Status: work in progress, actively evolving.
 - Theme/mode switcher with terminal menu
 - Gentoo updater action module with guided yes/no workflow
 - Dotfiles sync action module (private repo workflow)
+- Rofi tools hub action module (`TOOLS`)
 - Flameshot screenshot integration
   - i3 keybinds: `Print` (select), `Shift+Print` (full save)
   - Polybar action module: `SHOT`

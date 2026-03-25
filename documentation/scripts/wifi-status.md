@@ -53,7 +53,7 @@ Used for persistent scroll offset.
 
 Used by `[module/wifi]`.
 
-Label module `[module/wifi-label]` is rendered separately by `dynamic-rainbow.sh --block WIFI`.
+Label module `[module/wifi-label]` is rendered separately by `theme-engine.sh --block WIFI`.
 
 ## Manual test
 

@@ -21,6 +21,11 @@ This file tracks notable repo-level changes in plain language.
   - pre-checks for missing `en_US.UTF-8` before `@world`
 - Documentation refreshed to match current behavior:
   - overview, dependencies, support, environment, install guide, launch/updater script pages
+- Added TOOLS action integration:
+  - new script wrapper: `scripts/tools-launcher.sh`
+  - new script docs page: `documentation/scripts/tools-launcher.md`
+  - overview/index/dependency/support docs updated for tools hub path
+- `now-playing.sh` player selection logic improved to avoid mixed-source `stopped` states
 
 ## Notes
 

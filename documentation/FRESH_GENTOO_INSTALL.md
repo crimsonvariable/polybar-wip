@@ -25,6 +25,7 @@ Minimum commands expected by this setup:
 - `nvidia-smi` (only if using NVIDIA module)
 - `fastfetch` (optional visual extras)
 - `flameshot` (screenshot module + i3 screenshot binds)
+- `rofi` (TOOLS launcher module)
 
 ## 3. Apply config into `~/.config/polybar`
 

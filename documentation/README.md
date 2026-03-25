@@ -31,13 +31,14 @@ Snapshot folders under `backups/snapshots/` are historical captures and are not 
 ## Fast navigation
 
 - Core visual/theming engine:
-  - `scripts/dynamic-rainbow.md`
-  - `scripts/theme-switch.md`
+  - `scripts/theme-engine.md`
+  - `scripts/theme-control.md`
 - Startup animation lifecycle:
   - `scripts/launch.md`
   - `scripts/startup-load.md`
   - `scripts/candy-loop.md`
-  - `scripts/load-word.md`
+  - `scripts/spacer-spinner.md`
+  - `scripts/status-word-cycle.md`
 - Status modules:
   - `scripts/cpu-status.md`
   - `scripts/memory-status.md`
@@ -46,18 +47,19 @@ Snapshot folders under `backups/snapshots/` are historical captures and are not 
   - `scripts/wifi-status.md`
   - `scripts/now-playing.md`
   - `scripts/build-progress.md`
-  - `scripts/ws-list.md`
+  - `scripts/workspace-list.md`
 - Interactive workflows:
-  - `scripts/dotfiles-sync.md`
+  - `scripts/repo-sync.md`
   - `scripts/gentoo-update.md`
-  - `scripts/build-run.md`
-  - `scripts/snapshot-backup.md`
+  - `scripts/task-run-with-progress.md`
+  - `scripts/tools-launcher.md`
+  - `scripts/snapshot-create.md`
   - `scripts/install-gentoo.md`
 - Action/click modules:
   - `modules/flameshot.md`
 - Quote/text helpers:
-  - `scripts/random-lain-quote.md`
-  - `scripts/rainbow-text.md`
+  - `scripts/quote-random.md`
+  - `scripts/text-rainbow-static.md`
 
 ## Editing conventions
 

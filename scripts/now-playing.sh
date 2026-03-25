@@ -8,6 +8,8 @@ GAP="   //   "
 
 map_player_tag() {
   local name="${1,,}"
+  name="${name%%.instance*}"
+  name="${name%%.*}"
   case "$name" in
     spotify) printf '%s' "SP" ;;
     mpv) printf '%s' "MP" ;;
@@ -34,6 +36,37 @@ trim() {
   printf '%s' "$s"
 }
 
+pick_player() {
+  local p st
+
+  if ! command -v playerctl >/dev/null 2>&1; then
+    return 1
+  fi
+
+  # Prefer an actively playing source, then paused, then any available source.
+  while IFS= read -r p; do
+    [[ -n "$p" ]] || continue
+    st="$(playerctl -p "$p" status 2>/dev/null || true)"
+    if [[ "$st" == "Playing" ]]; then
+      printf '%s' "$p"
+      return 0
+    fi
+  done < <(playerctl -l 2>/dev/null | awk '!seen[$0]++')
+
+  while IFS= read -r p; do
+    [[ -n "$p" ]] || continue
+    st="$(playerctl -p "$p" status 2>/dev/null || true)"
+    if [[ "$st" == "Paused" ]]; then
+      printf '%s' "$p"
+      return 0
+    fi
+  done < <(playerctl -l 2>/dev/null | awk '!seen[$0]++')
+
+  p="$(playerctl -l 2>/dev/null | awk '!seen[$0]++ {print; exit}')"
+  [[ -n "$p" ]] || return 1
+  printf '%s' "$p"
+}
+
 fetch_now_playing() {
   local status artist title text player tag
 
@@ -42,17 +75,22 @@ fetch_now_playing() {
     return
   fi
 
-  player="$(playerctl metadata --format '{{playerName}}' 2>/dev/null || true)"
+  player="$(pick_player 2>/dev/null || true)"
+  if [[ -z "$player" ]]; then
+    printf '%s\t%s' "ST" "stopped"
+    return
+  fi
+
   tag="$(map_player_tag "$player")"
 
-  status="$(playerctl status 2>/dev/null || true)"
+  status="$(playerctl -p "$player" status 2>/dev/null || true)"
   if [[ -z "$status" || "$status" == "Stopped" ]]; then
     printf '%s\t%s' "${tag:-ST}" "stopped"
     return
   fi
 
-  artist="$(playerctl metadata artist 2>/dev/null || true)"
-  title="$(playerctl metadata title 2>/dev/null || true)"
+  artist="$(playerctl -p "$player" metadata artist 2>/dev/null || true)"
+  title="$(playerctl -p "$player" metadata title 2>/dev/null || true)"
   artist="$(trim "$artist")"
   title="$(trim "$title")"
 

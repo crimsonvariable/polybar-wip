@@ -1,6 +1,6 @@
-# dynamic-rainbow.sh
+# theme-engine.sh
 
-Script path: `~/.config/polybar/scripts/dynamic-rainbow.sh`
+Script path: `~/.config/polybar/scripts/theme-engine.sh`
 
 ## Purpose
 
@@ -10,6 +10,8 @@ Central color engine for animated labels and text gradients.
 
 - default mode: per-character flowing gradient
 - `--block <text>`: one solid interpolated color across entire text block
+- `--pipe <name>`: use an independent theme/flow state channel
+- `--channel <name>`: alias for `--pipe`
 
 Arguments after flag are treated as text payload.
 
@@ -30,6 +32,13 @@ Animation mode/speed from `/tmp/polybar-flow.state`:
 - mode: `flow`, `reverse`, `pulse`, `static`
 - speed: integer (used in phase calculation)
 
+Named pipes/channels use:
+
+- `/tmp/polybar-theme.<name>.state`
+- `/tmp/polybar-flow.<name>.state`
+
+Example: `--pipe spacer` uses `/tmp/polybar-theme.spacer.state`.
+
 ## Core logic
 
 - Creates continuous gradient over full text width.
@@ -43,12 +52,14 @@ Used by several modules for animated labels/text, including:
 - `volume-label`
 - `wifi-label`
 - `bld-label`
-- `custom-note`
+- `tools-launcher` (`TOOLS`)
+- `identity-label`
 - `gentoo-update` label text
 
 ## Manual test
 
 ```bash
-~/.config/polybar/scripts/dynamic-rainbow.sh "HELLO"
-~/.config/polybar/scripts/dynamic-rainbow.sh --block "CPU"
+~/.config/polybar/scripts/theme-engine.sh "HELLO"
+~/.config/polybar/scripts/theme-engine.sh --block "CPU"
+~/.config/polybar/scripts/theme-engine.sh --pipe spacer --block "/"
 ```

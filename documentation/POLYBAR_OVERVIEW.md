@@ -22,9 +22,9 @@ Scripts: `~/.config/polybar/scripts/`
 ## 2) Bar Layout (Current)
 
 ### `bar/main` (Top system row)
-- `modules-left = ws-list`
+- `modules-left = workspace-list`
 - `modules-center = now-playing`
-- `modules-right = volume-label volume cpu memory gpu-amd gpu-nv bld-label build-percent`
+- `modules-right = volume-label volume cpu memory gpu-amd bld-label build-percent`
 
 Purpose:
 - Left anchors workspace state.
@@ -32,8 +32,8 @@ Purpose:
 - Right is dense system telemetry (audio/cpu/ram/gpu/build).
 
 ### `bar/main2` (Second top row)
-- `modules-left = custom-note gentoo-update theme-switch flameshot dotfiles-sync`
-- `modules-center = load-word candy-loop`
+- `modules-left = identity-label gentoo-update theme-control flameshot tools-launcher repo-sync`
+- `modules-center = spacer-spin-left status-word-cycle candy-loop spacer-spin-right`
 - `modules-right = wifi-label wifi date`
 
 Purpose:
@@ -48,7 +48,7 @@ Purpose:
 - Show startup animation before normal bars appear.
 
 ### `bar/workspaces-only` (Non-primary monitors)
-- `modules-center = ws-list`
+- `modules-center = workspace-list`
 
 Purpose:
 - Keep other screens clean while still providing clickable workspace control.
@@ -80,14 +80,14 @@ Implemented in `~/.config/polybar/launch.sh`.
 ## 4) Theme Engine and Selector (How It Actually Works)
 
 Core files:
-- `dynamic-rainbow.sh`
-- `theme-switch.sh`
+- `theme-engine.sh`
+- `theme-control.sh`
 
 State files:
 - `/tmp/polybar-theme.state` (theme name)
 - `/tmp/polybar-flow.state` (mode + speed)
 
-### `dynamic-rainbow.sh`
+### `theme-engine.sh`
 - Reads current theme + flow mode/speed from `/tmp`.
 - Builds color arrays for each theme (`neon`, `synth`, `wired`, `mono`, `sunset`, `aurora`, `ember`, `ocean`, `acid`, `blood`).
 - Supports animated gradient modes:
@@ -101,22 +101,23 @@ Used for labels like:
 - `VOL`
 - `BLD`
 - `WIFI`
-- `custom-note`
+- `TOOLS`
+- `identity-label`
 - `gentoo-update` text
 
-### `theme-switch` module behavior
+### `theme-control` module behavior
 Module definition in `config.conf`:
-- `exec = .../theme-switch.sh --label`
-- `click-left = .../theme-switch.sh --next`
-- `click-middle = .../theme-switch.sh --next-mode`
-- `click-right = kitty -e .../theme-switch.sh --menu`
+- `exec = .../theme-control.sh --label`
+- `click-left = .../theme-control.sh --next`
+- `click-middle = .../theme-control.sh --next-mode`
+- `click-right = kitty -e .../theme-control.sh --menu`
 
 Meaning:
 - Left click cycles theme.
 - Middle click cycles animation mode.
 - Right click opens interactive menu in Kitty.
 
-### `theme-switch.sh --menu` (Kitty UI)
+### `theme-control.sh --menu` (Kitty UI)
 It is a text UI with numbered options:
 1. Set theme by number
 2. Cycle theme
@@ -168,7 +169,7 @@ It is a step-by-step, opt-in updater with explicit confirmations and safety note
 
 #### Quote injection logic
 Before each yes/no question, it runs:
-- `~/.config/polybar/scripts/random-lain-quote.sh`
+- `~/.config/polybar/scripts/quote-random.sh`
 
 That script:
 - picks random TSV line from `lain-quotes.tsv`
@@ -187,7 +188,7 @@ So yes, the updater UI is quote-driven by design at each decision point.
 ## 6) Runtime Modules Explained
 
 ### Workspace
-#### `ws-list` (`ws-list.sh`)
+#### `workspace-list` (`workspace-list.sh`)
 - Reads i3 workspace JSON (`i3-msg -t get_workspaces`).
 - Always renders `[1]...[10]`.
 - Every slot is clickable to switch workspace.
@@ -201,6 +202,7 @@ So yes, the updater UI is quote-driven by design at each decision point.
 ### Media
 #### `now-playing` (`now-playing.sh`)
 - Pulls metadata via `playerctl`.
+- Chooses one active player source (`Playing` preferred, then `Paused`).
 - Infers source tag (Spotify/mpv/firefox/chrome-family/etc).
 - Keeps fixed output width and marquee-scrolls long titles.
 - Designed to avoid layout jitter.
@@ -242,7 +244,7 @@ This means the string length is fixed while visual intensity changes with load.
 
 ### Screenshot actions
 #### `flameshot` (config-only module)
-- Label `SHOT` is theme-colored via `dynamic-rainbow --block`.
+- Label `SHOT` is theme-colored via `theme-engine --block`.
 - Click actions:
   - Left click: `flameshot gui` (interactive region capture)
   - Right click: `flameshot full -p ~/Pictures/Screenshots` (full-screen save)
@@ -250,7 +252,14 @@ This means the string length is fixed while visual intensity changes with load.
   - `Print` -> `flameshot gui`
   - `Shift+Print` -> full-screen save
 
-### Candy lane and load-word sync
+### Tools launcher action
+#### `tools-launcher`
+- Label `TOOLS` is theme-colored via `theme-engine --block`.
+- Left click runs `~/.config/polybar/scripts/tools-launcher.sh`.
+- Wrapper script launches `~/.config/rofi/scripts/tool-hub.sh`.
+- Intended as a stable Polybar entry-point while allowing rofi-side menu changes independently.
+
+### Candy lane and status-word-cycle sync
 #### `candy-loop` (`candy-loop.sh`)
 - Persistent ILoveCandy-style animation.
 - Reveals static trail text behind moving `C/c`.
@@ -258,7 +267,7 @@ This means the string length is fixed while visual intensity changes with load.
 - Holds at 100% before restarting.
 - Writes cycle-wrap counter to `/tmp/polybar-candy-cycle.count`.
 
-#### `load-word` (`load-word.sh`)
+#### `status-word-cycle` (`status-word-cycle.sh`)
 - Reads the candy cycle counter.
 - Advances word only when candy animation cycle completes.
 - So text switches are synchronized with animation completion, not random timer flips.
@@ -291,7 +300,7 @@ Common runtime state paths in `/tmp`:
 - `/tmp/polybar-startup.pos`
 - `/tmp/polybar-candy-loop.state`
 - `/tmp/polybar-candy-cycle.count`
-- `/tmp/polybar-loadword-prev.state`
+- `/tmp/polybar-status-word-prev.state`
 - `/tmp/polybar-wifi-scroll.state`
 - `/tmp/polybar-launch.log`
 
@@ -319,5 +328,5 @@ In short: it is a scripted Polybar runtime, not just a static INI.
 - keep now-playing fixed-width with source tags and marquee behavior
 - standardize CPU/RAM/GPU/WiFi to ICONIC full-text bars with gray unloaded chars
 - add robust Wi-Fi backend fallbacks including iwctl/iwd paths
-- synchronize load-word switching to candy-loop cycle completion
+- synchronize status-word-cycle switching to candy-loop cycle completion
 - provide guided gentoo updater UI with per-step disclaimers, strict y/n prompts, random quote injection, and final summary output

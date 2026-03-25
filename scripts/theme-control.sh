@@ -2,10 +2,54 @@
 
 set -euo pipefail
 
-STATE_FILE="/tmp/polybar-theme.state"
-FLOW_FILE="/tmp/polybar-flow.state"
+pipe_name="main"
+pipe_explicit=0
+STATE_FILE=""
+FLOW_FILE=""
 themes=("neon" "synth" "wired" "mono" "sunset" "aurora" "ember" "ocean" "acid" "blood")
 modes=("flow" "reverse" "pulse" "static")
+
+normalize_pipe() {
+  local p="${1,,}"
+  if [[ ! "$p" =~ ^[a-z0-9_-]+$ ]]; then
+    p="main"
+  fi
+  printf '%s' "$p"
+}
+
+set_state_files() {
+  if [[ "$pipe_name" == "main" ]]; then
+    STATE_FILE="/tmp/polybar-theme.state"
+    FLOW_FILE="/tmp/polybar-flow.state"
+  else
+    STATE_FILE="/tmp/polybar-theme.${pipe_name}.state"
+    FLOW_FILE="/tmp/polybar-flow.${pipe_name}.state"
+  fi
+}
+
+select_pipe_interactive() {
+  local answer=""
+  while true; do
+    printf '\nSelect Theme Pipe\n'
+    printf 'A) main   (global modules)\n'
+    printf 'B) spacer (spinner/spacer modules)\n'
+    read -r -p 'Choose [A/B]: ' answer
+    answer="${answer,,}"
+    case "$answer" in
+      a|"")
+        pipe_name="main"
+        return 0
+        ;;
+      b)
+        pipe_name="spacer"
+        return 0
+        ;;
+      *)
+        printf 'Please type A or B.\n'
+        ;;
+    esac
+  done
+}
 
 get_theme() {
   if [[ -r "$STATE_FILE" ]]; then
@@ -95,6 +139,7 @@ show_menu() {
     mode="$(get_mode)"
     speed="$(get_speed)"
     printf '\nTheme/Flow Control\n'
+    printf 'Current pipe : %s\n' "$pipe_name"
     printf 'Current theme: %s\n' "$cur"
     printf 'Current mode : %s\n' "$mode"
     printf 'Current speed: %s\n\n' "$speed"
@@ -173,14 +218,31 @@ show_menu() {
 
 show_help() {
   cat <<'EOF'
-theme-switch.sh - Theme + animation controller for Polybar rainbow modules
+theme-control.sh - Theme + animation controller for Polybar rainbow modules
 
 Usage:
-  theme-switch.sh --label
-  theme-switch.sh --next
-  theme-switch.sh --next-mode
-  theme-switch.sh --menu
-  theme-switch.sh --help
+  theme-control.sh [--pipe NAME] --label
+  theme-control.sh [--pipe NAME] --next
+  theme-control.sh [--pipe NAME] --next-mode
+  theme-control.sh [--pipe NAME] --menu
+  theme-control.sh [--pipe NAME] --help
+
+Pipe:
+  --pipe NAME       Select an independent theme/flow channel.
+                    NAME "main" uses:
+                      /tmp/polybar-theme.state
+                      /tmp/polybar-flow.state
+                    Any other NAME uses:
+                      /tmp/polybar-theme.<name>.state
+                      /tmp/polybar-flow.<name>.state
+
+Examples:
+  theme-control.sh --label
+  theme-control.sh --next
+  theme-control.sh --next-mode
+  theme-control.sh --menu
+  theme-control.sh --help
+  theme-control.sh --pipe spacer --menu
 
 Menu option guide:
   1) Set theme
@@ -216,14 +278,47 @@ Menu option guide:
      Close the menu.
 
 Direct command examples:
-  ~/.config/polybar/scripts/theme-switch.sh --label
-  ~/.config/polybar/scripts/theme-switch.sh --next
-  ~/.config/polybar/scripts/theme-switch.sh --next-mode
-  ~/.config/polybar/scripts/theme-switch.sh --menu
+  ~/.config/polybar/scripts/theme-control.sh --label
+  ~/.config/polybar/scripts/theme-control.sh --next
+  ~/.config/polybar/scripts/theme-control.sh --next-mode
+  ~/.config/polybar/scripts/theme-control.sh --menu
+  ~/.config/polybar/scripts/theme-control.sh --pipe spacer --menu
 EOF
 }
 
-cmd="${1:---label}"
+cmd="--label"
+while (( $# > 0 )); do
+  case "$1" in
+    --pipe)
+      if (( $# < 2 )); then
+        printf 'error: --pipe requires a value\n' >&2
+        exit 1
+      fi
+      pipe_name="$2"
+      pipe_explicit=1
+      shift 2
+      ;;
+    --pipe=*)
+      pipe_name="${1#*=}"
+      pipe_explicit=1
+      shift
+      ;;
+    --label|--next|--next-mode|--menu|--help|-h)
+      cmd="$1"
+      shift
+      break
+      ;;
+    *)
+      cmd="$1"
+      shift
+      break
+      ;;
+  esac
+done
+
+pipe_name="$(normalize_pipe "$pipe_name")"
+set_state_files
+
 case "$cmd" in
   --label)
     cur="$(get_theme)"
@@ -242,13 +337,18 @@ case "$cmd" in
     set_flow "$(next_mode "$mode")" "$speed"
     ;;
   --menu)
+    if (( !pipe_explicit )); then
+      select_pipe_interactive
+      pipe_name="$(normalize_pipe "$pipe_name")"
+      set_state_files
+    fi
     show_menu
     ;;
   --help|-h)
     show_help
     ;;
   *)
-    printf 'usage: %s [--label|--next|--next-mode|--menu|--help]\n' "$(basename "$0")" >&2
+    printf 'usage: %s [--pipe NAME] [--label|--next|--next-mode|--menu|--help]\n' "$(basename "$0")" >&2
     exit 1
     ;;
 esac
